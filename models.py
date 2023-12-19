@@ -226,19 +226,19 @@ class Model2:
         M = 100*100
         for j in range(self.nJobs):
             for i in range(self.nMachines):
-                for r in range(self.nMachines):
+                for e in range(self.nJobs):
                     for k in range(1, self.nJobs):
                         indices = [t for t in range(k)]
                         self.model.addConstr(
-                            self.c[j, i] >= self.c[j, r] + self.timeMatrix[j, i] - (1 - self.x[j, i, k]) * M
-                            - (1 - self.x[j, :, :][r, :][indices].sum() ) * M
+                            self.c[j, i] >= self.c[e, i] + self.timeMatrix[j, i] - (1 - self.x[j, i, k]) * M
+                            - (1 - self.x[e, :, :][i, :][indices].sum()) * M
                         )
-                for e in range(self.nJobs):
+                for r in range(self.nMachines):
                     for l in range(1, self.nMachines):
                         indices = [t for t in range(l)]
                         self.model.addConstr(
-                            self.c[j, i] >= self.c[e, i] + self.timeMatrix[j, i] - (1 - self.y[j, i, l]) * M
-                            - (1 - self.y[e, :, :][i, :][indices].sum()) * M
+                            self.c[j, i] >= self.c[j, r] + self.timeMatrix[j, i] - (1 - self.y[j, i, l]) * M
+                            - (1 - self.y[j, :, :][r, :][indices].sum()) * M
                         )
     
     def addMakespanConstraint(self):
